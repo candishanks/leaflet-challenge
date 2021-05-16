@@ -1,6 +1,5 @@
 // Store our API endpoint inside queryUrl
-var queryUrl = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2014-01-01&endtime=" +
-  "2014-01-02&maxlongitude=-69.52148437&minlongitude=-123.83789062&maxlatitude=48.74894534&minlatitude=25.16517337";
+var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
 // Perform a GET request to the query URL
 d3.json(queryUrl, function(data) {
@@ -80,16 +79,16 @@ function createMap(earthquakes) {
 // Adding in color Scales and legend
 
 
-function getColor(d) {
-    return d > 1000 ? '#800026' :
-           d > 500  ? '#BD0026' :
-           d > 200  ? '#E31A1C' :
-           d > 100  ? '#FC4E2A' :
-           d > 50   ? '#FD8D3C' :
-           d > 20   ? '#FEB24C' :
-           d > 10   ? '#FED976' :
-                      '#FFEDA0';
-}
+// function getColor(d) {
+//     return d > 1000 ? '#800026' :
+//            d > 500  ? '#BD0026' :
+//            d > 200  ? '#E31A1C' :
+//            d > 100  ? '#FC4E2A' :
+//            d > 50   ? '#FD8D3C' :
+//            d > 20   ? '#FEB24C' :
+//            d > 10   ? '#FED976' :
+//                       '#FFEDA0';
+// }
 
 var legend = L.control({position: 'bottomright'});
 
