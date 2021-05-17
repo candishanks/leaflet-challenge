@@ -1,11 +1,17 @@
+
+
 // Store our API endpoint inside queryUrl
 var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
 // Perform a GET request to the query URL
-d3.json(queryUrl, function(data) {
+d3.json(queryUrl).then(function(data) {
   // Once we get a response, send the data.features object to the createFeatures function
   createFeatures(data.features);
+  console.log(data)
+  console.log(data.features)
 });
+
+
 
 function createFeatures(earthquakeData) {
 
@@ -27,16 +33,23 @@ function createFeatures(earthquakeData) {
 }
 
 function createMap(earthquakes) {
-
+console.log("earthquake")
   // Define streetmap and darkmap layers
-  var streetmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+
+  console.log("hello")
+var streetmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
     tileSize: 512,
     maxZoom: 18,
     zoomOffset: -1,
-    id: "mapbox/streets-v11",
+    id: "mapbox/light-v10",
     accessToken: API_KEY
   });
+
+  console.log(streetmap)
+
+
+
 
   var darkmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
@@ -56,14 +69,17 @@ function createMap(earthquakes) {
     Earthquakes: earthquakes
   };
 
-  // Create our map, giving it the streetmap and earthquakes layers to display on load
-  var myMap = L.map("mapid", {
-    center: [
-      37.09, -95.71
-    ],
-    zoom: 5,
-    layers: [streetmap, earthquakes]
-  });
+      // Create our map, giving it the streetmap and earthquakes layers to display on load
+      var myMap = L.map("mapid", {
+        center: [
+          37.09, -95.71
+        ],
+        zoom: 5
+      });
+
+streetmap.addTo(myMap)
+
+
 
   // Create a layer control
   // Pass in our baseMaps and overlayMaps
@@ -76,24 +92,23 @@ function createMap(earthquakes) {
 
 
 
-// Adding in color Scales and legend
+// // Adding in color Scales and legend
 
 
-// function getColor(d) {
-//     return d > 1000 ? '#800026' :
-//            d > 500  ? '#BD0026' :
-//            d > 200  ? '#E31A1C' :
-//            d > 100  ? '#FC4E2A' :
-//            d > 50   ? '#FD8D3C' :
-//            d > 20   ? '#FEB24C' :
-//            d > 10   ? '#FED976' :
-//                       '#FFEDA0';
-// }
+function getColor(d) {
+    return d > 1000 ? '#800026' :
+           d > 500  ? '#BD0026' :
+           d > 200  ? '#E31A1C' :
+           d > 100  ? '#FC4E2A' :
+           d > 50   ? '#FD8D3C' :
+           d > 20   ? '#FEB24C' :
+           d > 10   ? '#FED976' :
+                      '#FFEDA0';
+}
 
 var legend = L.control({position: 'bottomright'});
 
-legend.onAdd = function (map) {
-
+legend.onAdd = function(){
     var div = L.DomUtil.create('div', 'info legend'),
         grades = [0, 10, 20, 50, 100, 200, 500, 1000],
         labels = [];
@@ -108,5 +123,5 @@ legend.onAdd = function (map) {
     return div;
 };
 
-legend.addTo(map);
+legend.addTo(myMap);
 
