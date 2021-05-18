@@ -25,7 +25,23 @@ function createFeatures(earthquakeData) {
   // Create a GeoJSON layer containing the features array on the earthquakeData object
   // Run the onEachFeature function once for each piece of data in the array
   var earthquakes = L.geoJSON(earthquakeData, {
-    onEachFeature: onEachFeature
+    onEachFeature: onEachFeature, 
+    pointToLayer: function(feature, latlng) {
+        var smallIcon = L.Icon({
+            options: {
+                iconSize: [27, 27],
+                iconAnchor: [13, 27],
+                popupAnchor:  [1, -24],
+                iconUrl: 'icone/chapel-2.png'
+            }
+        });
+        return L.marker(latlng, {icon: smallIcon});
+    },
+   onEachFeature: function (feature, layer) {
+           layer.bindPopup(feature.properties.ATT1 + '<br />'
+                                         + feature.properties.ATT2);
+   }
+ });
   });
 
   // Sending our earthquakes layer to the createMap function
